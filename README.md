@@ -11,7 +11,9 @@
 ## Tuần 1
 
 - **Buổi 1:**
-  - [Ghi nội dung bài tập buổi 1 tại đây]
+  - Thiết lập môi trường và cấu trúc dự án Node.js (Express.js, Sequelize, EJS).
+  - Kết nối MySQL, quản lý biến môi trường (`dotenv`) và băm mật khẩu (`bcryptjs`)
+  - Thực hiện CRUD dữ liệu cơ bản
 - **Buổi 2:**
   - [Ghi nội dung bài tập buổi 2 tại đây]
 
