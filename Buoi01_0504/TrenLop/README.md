@@ -29,7 +29,11 @@
   ```
 - cd vào thư mục dự án:
   ```bash
-  cd Buoi01_0504
+
+  ```
+- cd Buoi01_0504\TrenLop
+  ```
+
   ```
 - Chạy lệnh để cài đặt các thư viện cần thiết:
   ```bash
