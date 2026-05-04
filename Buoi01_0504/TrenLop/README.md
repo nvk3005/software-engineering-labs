@@ -28,13 +28,11 @@
   git clone https://github.com/nvk3005/software-engineering-labs.git
   ```
 - cd vào thư mục dự án:
+
   ```bash
-
-  ```
-- cd Buoi01_0504\TrenLop
+  cd Buoi01_0504\TrenLop
   ```
 
-  ```
 - Chạy lệnh để cài đặt các thư viện cần thiết:
   ```bash
   npm install
