@@ -62,7 +62,7 @@ cd software-engineering-labs/Buoi03_1105/FullStackNodeJS01
    ```bash
    npm run dev
    ```
-   Server sẽ chạy tại: `http://localhost:8080`_
+   Server sẽ chạy tại: `http://localhost:8080`\_
 
 ### 4. Cấu hình Frontend (ReactJS01)
 
@@ -78,7 +78,8 @@ cd software-engineering-labs/Buoi03_1105/FullStackNodeJS01
    ```bash
    npm run dev
    ```
-   Ứng dụng sẽ chạy tại: `http://localhost:5173` 
+   Ứng dụng sẽ chạy tại: `http://localhost:5173`
+
 ---
 
 ## Danh sách API (Backend)
@@ -89,5 +90,7 @@ cd software-engineering-labs/Buoi03_1105/FullStackNodeJS01
 | POST   | `/v1/api/login`    | No   |
 | GET    | `/v1/api/user`     | Yes  |
 | GET    | `/v1/api/account`  | Yes  |
+
+Kết quả test API với Postman: `Buoi03_1105/FullStackNodeJS01/ExpressJS01/TestAPI_BaiTap03.postman_collection.json`
 
 ---
