@@ -1,0 +1,300 @@
+{
+  "info": {
+    "_postman_id": "d22e6f60-e063-4581-88c8-c9867d67375f",
+    "name": "TestAPI_BaiTap03",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44357218",
+    "_collection_link": "https://go.postman.co/collection/44357218-d22e6f60-e063-4581-88c8-c9867d67375f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "name",
+              "value": "Nguyễn Văn Kế",
+              "type": "text",
+              "uuid": "867cce41-a082-4161-b259-a2a2f868c159"
+            },
+            {
+              "key": "email",
+              "value": "nguyenvankent3005@gmail.com",
+              "type": "text",
+              "uuid": "2e6e6383-3c90-4048-9f6c-6585f23de6d3"
+            },
+            {
+              "key": "password",
+              "value": "123456",
+              "type": "text",
+              "uuid": "681d72dd-0769-4fd0-af5c-b59e90f3d16f"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/api/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "api",
+            "register"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Register",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Nguyễn Văn Kế",
+                  "type": "text",
+                  "uuid": "867cce41-a082-4161-b259-a2a2f868c159"
+                },
+                {
+                  "key": "email",
+                  "value": "nguyenvankent3005@gmail.com",
+                  "type": "text",
+                  "uuid": "2e6e6383-3c90-4048-9f6c-6585f23de6d3"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text",
+                  "uuid": "681d72dd-0769-4fd0-af5c-b59e90f3d16f"
+                }
+              ],
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/v1/api/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "api",
+                "register"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "196"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"c4-42LAwLsZZp29LHgPlkZWx+a9pZY\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 11 May 2026 06:44:39 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"name\": \"Nguyễn Văn Kế\",\n    \"email\": \"nguyenvankent3005@gmail.com\",\n    \"password\": \"$2b$10$XoX1RFe9Fpa59o8LrPE69Od.KcAMPkG5C9m5QxUKUJjF0x76qYUsC\",\n    \"role\": \"User\",\n    \"_id\": \"6a017ad709624df6f57b614d\",\n    \"__v\": 0\n}"
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "name",
+              "value": "Nguyễn Văn Kế",
+              "type": "text",
+              "uuid": "867cce41-a082-4161-b259-a2a2f868c159"
+            },
+            {
+              "key": "email",
+              "value": "nguyenvankent3005@gmail.com",
+              "type": "text",
+              "uuid": "2e6e6383-3c90-4048-9f6c-6585f23de6d3"
+            },
+            {
+              "key": "password",
+              "value": "123456",
+              "type": "text",
+              "uuid": "681d72dd-0769-4fd0-af5c-b59e90f3d16f"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/v1/api/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Login",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Nguyễn Văn Kế",
+                  "type": "text",
+                  "uuid": "867cce41-a082-4161-b259-a2a2f868c159"
+                },
+                {
+                  "key": "email",
+                  "value": "nguyenvankent3005@gmail.com",
+                  "type": "text",
+                  "uuid": "2e6e6383-3c90-4048-9f6c-6585f23de6d3"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text",
+                  "uuid": "681d72dd-0769-4fd0-af5c-b59e90f3d16f"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/v1/api/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "api",
+                "login"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "X-Powered-By",
+              "value": "Express"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "317"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"13d-isGLaKIoCYOZwphkUEiaZngSnSk\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 11 May 2026 06:49:13 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"EC\": 0,\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ndXllbnZhbmtlbnQzMDA1QGdtYWlsLmNvbSIsIm5hbWUiOiJOZ3V54buFbiBWxINuIEvhur8iLCJpYXQiOjE3Nzg0ODIxNTMsImV4cCI6MTc3ODQ4NTc1M30.0yxt3mzpHbWzcCw5aug286PgsH5fq_TezIlq-EVYjYE\",\n    \"user\": {\n        \"email\": \"nguyenvankent3005@gmail.com\",\n        \"name\": \"Nguyễn Văn Kế\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Helloword",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5ndXllbnZhbmtlbnQzMDA1QGdtYWlsLmNvbSIsIm5hbWUiOiJOZ3V54buFbiBWxINuIEvhur8iLCJpYXQiOjE3Nzg0ODIxNTMsImV4cCI6MTc3ODQ4NTc1M30.0yxt3mzpHbWzcCw5aug286PgsH5fq_TezIlq-EVYjYE",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/v1/api",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "v1",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
