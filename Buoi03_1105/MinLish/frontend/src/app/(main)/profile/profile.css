@@ -1,0 +1,94 @@
+.profile-card {
+  background: #fff;
+  border: 0.5px solid #e5e5e5;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.profile-banner {
+  height: 90px;
+  background: linear-gradient(135deg, #185fa5, #0f6e56);
+  position: relative;
+}
+.avatar-wrap {
+  position: absolute;
+  bottom: -60px;
+  left: 1.5rem;
+}
+.avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  object-fit: cover;
+}
+.profile-header {
+  padding: 3.5rem 1.5rem 1rem;
+  border-bottom: 0.5px solid #e5e5e5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.name {
+  font-size: 20px;
+  font-weight: 500;
+}
+.username {
+  font-size: 13px;
+  color: #888;
+}
+.badge-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #e1f5ee;
+  color: #0f6e56;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+.edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 13px;
+  background: transparent;
+  cursor: pointer;
+}
+.profile-body {
+  padding: 1.25rem 1.5rem;
+}
+.info-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.three-col {
+  grid-template-columns: repeat(3, 1fr);
+}
+.two-col {
+  grid-template-columns: 1fr 2fr;
+}
+.info-card {
+  background: #f7f7f5;
+  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  display: flex;
+  gap: 10px;
+}
+.label {
+  font-size: 11px;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 2px;
+}
+.value {
+  font-size: 14px;
+  font-weight: 500;
+}
