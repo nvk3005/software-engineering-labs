@@ -1,0 +1,182 @@
+{
+  "users": [
+    {
+      "id": "u-001",
+      "name": "Thành viên Demo",
+      "email": "demo@luxewatch.test",
+      "password": "Password123!",
+      "phone": "0900000000",
+      "address": "Thành phố Hồ Chí Minh",
+      "isVerified": true
+    }
+  ],
+  "products": [
+    {
+      "id": "lw-001",
+      "name": "Seiko Presage Cocktail Time",
+      "brand": "Seiko",
+      "category": "Đồng hồ cơ",
+      "price": 12600000,
+      "oldPrice": 14800000,
+      "rating": 4.8,
+      "sold": 126,
+      "stock": 18,
+      "isNew": true,
+      "isHot": true,
+      "isSale": true,
+      "createdAt": "2026-05-01T08:00:00.000Z",
+      "images": [
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1539874754764-5a96559165b0?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Mặt số sunburst trắng thanh lịch, máy automatic Nhật Bản và dây da cao cấp cho phong cách công sở sang trọng.",
+      "specs": ["Automatic", "Kính Hardlex", "Chống nước 50m", "Dự trữ cót 41 giờ"],
+      "reviews": [
+        { "user": "Minh Anh", "rating": 5, "comment": "Lên tay rất sang, đồng hồ chạy ổn định." },
+        { "user": "Quốc Huy", "rating": 4.5, "comment": "Hoàn thiện đẹp, hợp làm quà tặng." }
+      ]
+    },
+    {
+      "id": "lw-002",
+      "name": "Tissot PRX Powermatic 80",
+      "brand": "Tissot",
+      "category": "Đồng hồ thể thao",
+      "price": 21400000,
+      "oldPrice": 23900000,
+      "rating": 4.9,
+      "sold": 98,
+      "stock": 10,
+      "isNew": false,
+      "isHot": true,
+      "isSale": true,
+      "createdAt": "2026-04-20T08:00:00.000Z",
+      "images": [
+        "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Thiết kế integrated bracelet biểu tượng, bộ máy Powermatic 80 và mặt xanh độc đáo.",
+      "specs": ["Automatic", "Kính Sapphire", "Chống nước 100m", "Dự trữ cót 80 giờ"],
+      "reviews": [
+        { "user": "Bảo Trân", "rating": 5, "comment": "Dây thép ôm tay, mặt xanh cực đẹp." },
+        { "user": "Thành Đạt", "rating": 4.8, "comment": "Giá tốt so với chất lượng Thụy Sỹ." }
+      ]
+    },
+    {
+      "id": "lw-003",
+      "name": "Orient Bambino Gen 2",
+      "brand": "Orient",
+      "category": "Đồng hồ cơ",
+      "price": 6250000,
+      "oldPrice": 0,
+      "rating": 4.6,
+      "sold": 211,
+      "stock": 24,
+      "isNew": false,
+      "isHot": true,
+      "isSale": false,
+      "createdAt": "2026-03-11T08:00:00.000Z",
+      "images": ["https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1200&q=80"],
+      "description": "Dress watch kính cong cổ điển, phù hợp với suit và những buổi hẹn tối.",
+      "specs": ["Automatic", "Kính Mineral", "Chống nước 30m", "Dây da"],
+      "reviews": [{ "user": "Hoàng Nam", "rating": 4.5, "comment": "Đẹp hơn ảnh, giá dễ tiếp cận." }]
+    },
+    {
+      "id": "lw-004",
+      "name": "Citizen Tsuyosa Small Second",
+      "brand": "Citizen",
+      "category": "Đồng hồ thể thao",
+      "price": 10900000,
+      "oldPrice": 0,
+      "rating": 4.7,
+      "sold": 73,
+      "stock": 16,
+      "isNew": true,
+      "isHot": false,
+      "isSale": false,
+      "createdAt": "2026-05-08T08:00:00.000Z",
+      "images": ["https://images.unsplash.com/photo-1612817159949-195b6eb9e31a?auto=format&fit=crop&w=1200&q=80"],
+      "description": "Mặt số small second trẻ trung, dây thép liền khối và kích thước dễ đeo hằng ngày.",
+      "specs": ["Automatic", "Kính Sapphire", "Chống nước 50m", "Dây thép"],
+      "reviews": [{ "user": "Ngọc Sơn", "rating": 4.7, "comment": "Màu mặt số nổi bật nhưng vẫn lịch sự." }]
+    },
+    {
+      "id": "lw-005",
+      "name": "Longines HydroConquest",
+      "brand": "Longines",
+      "category": "Đồng hồ lặn",
+      "price": 43800000,
+      "oldPrice": 48900000,
+      "rating": 4.9,
+      "sold": 54,
+      "stock": 7,
+      "isNew": false,
+      "isHot": true,
+      "isSale": true,
+      "createdAt": "2026-02-15T08:00:00.000Z",
+      "images": [
+        "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1604242692760-2f7b0c26856d?auto=format&fit=crop&w=1200&q=80"
+      ],
+      "description": "Diver cao cấp với bezel gốm, mặt xanh sâu và khả năng chống nước 300m.",
+      "specs": ["Automatic", "Bezel ceramic", "Chống nước 300m", "Kính Sapphire"],
+      "reviews": [{ "user": "Việt Khoa", "rating": 5, "comment": "Đáng tiền, cảm giác rất chắc chắn." }]
+    },
+    {
+      "id": "lw-006",
+      "name": "Hamilton Jazzmaster Open Heart",
+      "brand": "Hamilton",
+      "category": "Đồng hồ cơ",
+      "price": 26500000,
+      "oldPrice": 0,
+      "rating": 4.8,
+      "sold": 61,
+      "stock": 9,
+      "isNew": true,
+      "isHot": false,
+      "isSale": false,
+      "createdAt": "2026-05-10T08:00:00.000Z",
+      "images": ["https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?auto=format&fit=crop&w=1200&q=80"],
+      "description": "Mặt open heart tinh tế khoe chuyển động cơ khí, chất Mỹ pha trộn kỹ nghệ Thụy Sỹ.",
+      "specs": ["Automatic H-10", "Open heart", "Kính Sapphire", "Dự trữ cót 80 giờ"],
+      "reviews": [{ "user": "Phương Linh", "rating": 4.8, "comment": "Mặt số có chiều sâu, rất cuốn." }]
+    },
+    {
+      "id": "lw-007",
+      "name": "Casio G-Shock Full Metal",
+      "brand": "Casio",
+      "category": "Đồng hồ quartz",
+      "price": 13200000,
+      "oldPrice": 15900000,
+      "rating": 4.7,
+      "sold": 188,
+      "stock": 20,
+      "isNew": false,
+      "isHot": true,
+      "isSale": true,
+      "createdAt": "2026-01-21T08:00:00.000Z",
+      "images": ["https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=1200&q=80"],
+      "description": "G-Shock vỏ kim loại bền bỉ, hợp người thích phong cách mạnh mẽ và năng động.",
+      "specs": ["Quartz Solar", "Bluetooth", "Chống sốc", "Chống nước 200m"],
+      "reviews": [{ "user": "Đức Anh", "rating": 4.6, "comment": "Bền, đẹp, đeo đi làm hay đi chơi đều hợp." }]
+    },
+    {
+      "id": "lw-008",
+      "name": "Frederique Constant Classic Moonphase",
+      "brand": "Frederique Constant",
+      "category": "Đồng hồ sang trọng",
+      "price": 59200000,
+      "oldPrice": 0,
+      "rating": 4.9,
+      "sold": 35,
+      "stock": 5,
+      "isNew": true,
+      "isHot": false,
+      "isSale": false,
+      "createdAt": "2026-05-12T08:00:00.000Z",
+      "images": ["https://images.unsplash.com/photo-1623998021450-85c29c644e0d?auto=format&fit=crop&w=1200&q=80"],
+      "description": "Moonphase cổ điển, vật liệu hoàn thiện cao, dành cho người thích vẻ đẹp trầm lắng.",
+      "specs": ["Automatic", "Moonphase", "Kính Sapphire", "Dây da cá sấu"],
+      "reviews": [{ "user": "Gia Hân", "rating": 5, "comment": "Rất tinh tế, hợp sự kiện trang trọng." }]
+    }
+  ]
+}
