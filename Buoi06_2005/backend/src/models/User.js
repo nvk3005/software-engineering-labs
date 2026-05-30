@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     phone: { type: String, default: "" },
     address: { type: String, default: "" },
+    avatarUrl: { type: String, default: "" },
+    avatarPublicId: { type: String, default: "" },
     isVerified: { type: Boolean, default: false },
     refreshTokens: { type: [String], default: [] },
   },

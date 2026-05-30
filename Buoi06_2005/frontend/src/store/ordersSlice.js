@@ -73,6 +73,7 @@ const ordersSlice = createSlice({
       .addCase(checkoutOrder.fulfilled, (state, action) => {
         state.checkoutStatus = "succeeded";
         state.selected = action.payload;
+        state.error = "";
         state.items = [action.payload, ...state.items.filter((order) => order.id !== action.payload.id)];
       })
       .addCase(checkoutOrder.rejected, (state, action) => {
@@ -85,14 +86,27 @@ const ordersSlice = createSlice({
       })
       .addCase(fetchOrders.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.error = "";
         state.items = action.payload;
       })
       .addCase(fetchOrders.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       })
+      .addCase(fetchOrderDetail.pending, (state) => {
+        state.status = "loading";
+        state.selected = null;
+        state.error = "";
+      })
       .addCase(fetchOrderDetail.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = "";
         state.selected = action.payload;
+      })
+      .addCase(fetchOrderDetail.rejected, (state, action) => {
+        state.status = "failed";
+        state.selected = null;
+        state.error = action.payload;
       })
       .addCase(cancelOrder.fulfilled, (state, action) => {
         state.selected = action.payload;

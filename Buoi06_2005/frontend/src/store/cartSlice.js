@@ -23,10 +23,17 @@ export const removeCartItem = createAsyncThunk("cart/remove", async (productId) 
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState: { items: [] },
+  initialState: {
+    items: [],
+    status: "idle",
+    toast: null,
+  },
   reducers: {
     clearCart(state) {
       state.items = [];
+    },
+    clearCartToast(state) {
+      state.toast = null;
     }
   },
   extraReducers: (builder) => {
@@ -34,8 +41,27 @@ const cartSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.items = action.payload;
       })
+      .addCase(addToCart.pending, (state) => {
+        state.status = "adding";
+      })
       .addCase(addToCart.fulfilled, (state, action) => {
+        state.status = "idle";
         state.items = action.payload;
+        state.toast = {
+          id: Date.now(),
+          type: "success",
+          title: "Đã thêm vào giỏ hàng",
+          message: "Bạn có thể tiếp tục mua sắm hoặc kiểm tra giỏ hàng.",
+        };
+      })
+      .addCase(addToCart.rejected, (state) => {
+        state.status = "idle";
+        state.toast = {
+          id: Date.now(),
+          type: "error",
+          title: "Chưa thêm được sản phẩm",
+          message: "Vui lòng thử lại sau.",
+        };
       })
       .addCase(updateCartItem.fulfilled, (state, action) => {
         state.items = action.payload;
@@ -46,5 +72,5 @@ const cartSlice = createSlice({
   }
 });
 
-export const { clearCart } = cartSlice.actions;
+export const { clearCart, clearCartToast } = cartSlice.actions;
 export default cartSlice.reducer;

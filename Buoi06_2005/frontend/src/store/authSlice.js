@@ -3,6 +3,13 @@ import api from "../services/api";
 
 function readSavedUser() {
   try {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("refreshToken");
+      return null;
+    }
+
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   } catch {
@@ -19,13 +26,17 @@ const initialState = {
   error: ""
 };
 
+function saveUser(user) {
+  localStorage.setItem("user", JSON.stringify(user));
+  return user;
+}
+
 export const login = createAsyncThunk("auth/login", async (payload, { rejectWithValue }) => {
   try {
     const { data } = await api.post("/auth/v1/login", payload);
     localStorage.setItem("accessToken", data.accessToken);
     localStorage.setItem("refreshToken", data.refreshToken);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    return data.user;
+    return saveUser(data.user);
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || "Đăng nhập thất bại");
   }
@@ -43,10 +54,22 @@ export const register = createAsyncThunk("auth/register", async (payload, { reje
 export const updateProfile = createAsyncThunk("auth/updateProfile", async (payload, { rejectWithValue }) => {
   try {
     const { data } = await api.put("/users/me", payload);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    return data.user;
+    return saveUser(data.user);
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || "Cập nhật thất bại");
+  }
+});
+
+export const uploadAvatar = createAsyncThunk("auth/uploadAvatar", async (file, { rejectWithValue }) => {
+  try {
+    const formData = new FormData();
+    formData.append("avatar", file);
+    const { data } = await api.put("/users/me/avatar", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return saveUser(data.user);
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || "Upload ảnh thất bại");
   }
 });
 
@@ -77,8 +100,29 @@ const authSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
+      .addCase(updateProfile.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
       .addCase(updateProfile.fulfilled, (state, action) => {
+        state.status = "succeeded";
         state.user = action.payload;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      .addCase(uploadAvatar.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(uploadAvatar.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.user = action.payload;
+      })
+      .addCase(uploadAvatar.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   }
 });

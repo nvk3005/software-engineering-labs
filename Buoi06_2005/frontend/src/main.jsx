@@ -1,14 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { store } from "./store";
 import App from "./pages/App";
 import AuthPage from "./pages/AuthPage";
+import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
 import OrdersPage from "./pages/OrdersPage";
 import ProductDetail from "./pages/ProductDetail";
+import ProfilePage from "./pages/ProfilePage";
+import CartToast from "./components/CartToast";
 import "./styles.css";
 
 class AppErrorBoundary extends React.Component {
@@ -19,6 +22,12 @@ class AppErrorBoundary extends React.Component {
 
   static getDerivedStateFromError(error) {
     return { error };
+  }
+
+  componentDidUpdate(previousProps) {
+    if (this.state.error && previousProps.resetKey !== this.props.resetKey) {
+      this.setState({ error: null });
+    }
   }
 
   render() {
@@ -42,25 +51,44 @@ class AppErrorBoundary extends React.Component {
 }
 
 function Protected({ children }) {
+  const location = useLocation();
   const token = localStorage.getItem("accessToken");
-  return token ? children : <Navigate to="/auth" replace />;
+  if (!token) {
+    localStorage.removeItem("user");
+    localStorage.removeItem("refreshToken");
+    const redirect = `${location.pathname}${location.search}${location.hash}`;
+    return <Navigate to={`/auth?redirect=${encodeURIComponent(redirect)}`} replace />;
+  }
+  return children;
+}
+
+function AppRoutes() {
+  const location = useLocation();
+  const resetKey = `${location.pathname}${location.search}${location.hash}`;
+
+  return (
+    <AppErrorBoundary resetKey={resetKey}>
+      <CartToast />
+      <Routes>
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/" element={<Protected><App /></Protected>} />
+        <Route path="/profile" element={<Protected><ProfilePage /></Protected>} />
+        <Route path="/cart" element={<Protected><CartPage /></Protected>} />
+        <Route path="/checkout" element={<Protected><CheckoutPage /></Protected>} />
+        <Route path="/orders" element={<Protected><OrdersPage /></Protected>} />
+        <Route path="/orders/:orderId" element={<Protected><OrderDetailPage /></Protected>} />
+        <Route path="/products/:id" element={<Protected><ProductDetail /></Protected>} />
+      </Routes>
+    </AppErrorBoundary>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AppErrorBoundary>
-      <Provider store={store}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/" element={<Protected><App /></Protected>} />
-            <Route path="/checkout" element={<Protected><CheckoutPage /></Protected>} />
-            <Route path="/orders" element={<Protected><OrdersPage /></Protected>} />
-            <Route path="/orders/:orderId" element={<Protected><OrderDetailPage /></Protected>} />
-            <Route path="/products/:id" element={<Protected><ProductDetail /></Protected>} />
-          </Routes>
-        </BrowserRouter>
-      </Provider>
-    </AppErrorBoundary>
+    <Provider store={store}>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );

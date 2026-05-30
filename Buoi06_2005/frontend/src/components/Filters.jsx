@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 
-export default function Filters({ filters, facets, onChange, onReset }) {
+export default function Filters({ filters, facets, onChange, onReset, hideSort = false }) {
   const set = (key, value) => onChange({ ...filters, [key]: value, page: 1 });
   const toggle = (key) => onChange({ ...filters, [key]: filters[key] === "true" ? "" : "true", page: 1 });
 
@@ -38,16 +38,18 @@ export default function Filters({ filters, facets, onChange, onReset }) {
         Rating tối thiểu
         <input type="number" step="0.1" min="0" max="5" value={filters.minRating} onChange={(event) => set("minRating", event.target.value)} />
       </label>
-      <label>
-        Sắp xếp
-        <select value={filters.sort} onChange={(event) => set("sort", event.target.value)}>
-          <option value="newest">Mới nhất</option>
-          <option value="price_asc">Giá tăng dần</option>
-          <option value="price_desc">Giá giảm dần</option>
-          <option value="rating">Rating cao</option>
-          <option value="sold">Bán chạy</option>
-        </select>
-      </label>
+      {!hideSort && (
+        <label>
+          Sắp xếp
+          <select value={filters.sort} onChange={(event) => set("sort", event.target.value)}>
+            <option value="newest">Mới nhất</option>
+            <option value="price_asc">Giá tăng dần</option>
+            <option value="price_desc">Giá giảm dần</option>
+            <option value="rating">Rating cao</option>
+            <option value="sold">Bán chạy</option>
+          </select>
+        </label>
+      )}
       <div className="chips">
         <button className={filters.isNew === "true" ? "active" : ""} onClick={() => toggle("isNew")}>Hàng mới</button>
         <button className={filters.isHot === "true" ? "active" : ""} onClick={() => toggle("isHot")}>Bán chạy</button>

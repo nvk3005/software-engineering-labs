@@ -22,5 +22,6 @@ export const safeUser = (user) => ({
   email: user.email,
   phone: user.phone || "",
   address: user.address || "",
+  avatarUrl: user.avatarUrl || "",
   isVerified: Boolean(user.isVerified),
 });

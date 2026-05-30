@@ -11,8 +11,8 @@ export default function ProductCard({ product, onAdd }) {
       <Link to={`/products/${product.id}`} className="image-link">
         <img src={product.images[0]} alt={product.name} />
         <div className="badges">
-          {product.isNew && <span>New</span>}
-          {product.isHot && <span>Hot</span>}
+          {product.isNew && <span>Mới</span>}
+          {product.isHot && <span>Bán chạy</span>}
           {product.isSale && <span>-{salePercent}%</span>}
         </div>
       </Link>

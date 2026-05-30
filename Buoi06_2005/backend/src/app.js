@@ -30,6 +30,14 @@ app.use("/api/users", userRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
+app.use((error, req, res, next) => {
+  if (error) {
+    const status = error.code === "LIMIT_FILE_SIZE" ? 413 : 400;
+    return res.status(status).json({ message: error.message || "Yêu cầu không hợp lệ" });
+  }
+  return next();
+});
+
 app.use((req, res) => res.status(404).json({ message: "Không tìm thấy route" }));
 
 export default app;

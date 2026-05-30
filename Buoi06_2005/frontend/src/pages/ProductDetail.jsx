@@ -8,6 +8,25 @@ import { addToCart } from "../store/cartSlice";
 import { fetchProductDetail } from "../store/productsSlice";
 
 const money = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
+const magnifierZoom = 2.8;
+const magnifierSize = 176;
+
+function RatingStars({ rating, size = 15 }) {
+  const rounded = Math.round(Number(rating) || 0);
+
+  return (
+    <span className="star-row" aria-label={`${rating} sao`}>
+      {Array.from({ length: 5 }, (_, index) => (
+        <Star
+          key={index}
+          size={size}
+          fill={index < rounded ? "currentColor" : "none"}
+          strokeWidth={index < rounded ? 0 : 2}
+        />
+      ))}
+    </span>
+  );
+}
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -15,19 +34,56 @@ export default function ProductDetail() {
   const { selected: product, related } = useSelector((state) => state.products);
   const [imageIndex, setImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [magnifier, setMagnifier] = useState({
+    active: false,
+    x: 50,
+    y: 50,
+    bgX: 0,
+    bgY: 0,
+    bgWidth: 0,
+    bgHeight: 0,
+  });
 
   useEffect(() => {
     dispatch(fetchProductDetail(id));
     setImageIndex(0);
     setQuantity(1);
+    setMagnifier({ active: false, x: 50, y: 50, bgX: 0, bgY: 0, bgWidth: 0, bgHeight: 0 });
   }, [dispatch, id]);
 
-  if (!product) return <><Header /><main className="shell">Đang tải...</main></>;
+  if (!product) {
+    return (
+      <>
+        <Header />
+        <main className="shell">Đang tải...</main>
+      </>
+    );
+  }
 
+  const currentImage = product.images[imageIndex];
   const starBuckets = [5, 4, 3, 2, 1].map((score) => ({
     score,
     count: product.reviews.filter((review) => Math.round(review.rating) === score).length
   }));
+  const maxBucket = Math.max(...starBuckets.map((bucket) => bucket.count), 1);
+
+  const moveMagnifier = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const cursorX = event.clientX - rect.left;
+    const cursorY = event.clientY - rect.top;
+    const x = Math.min(100, Math.max(0, (cursorX / rect.width) * 100));
+    const y = Math.min(100, Math.max(0, (cursorY / rect.height) * 100));
+
+    setMagnifier({
+      active: true,
+      x,
+      y,
+      bgX: -(cursorX * magnifierZoom - magnifierSize / 2),
+      bgY: -(cursorY * magnifierZoom - magnifierSize / 2),
+      bgWidth: rect.width * magnifierZoom,
+      bgHeight: rect.height * magnifierZoom,
+    });
+  };
 
   return (
     <>
@@ -36,7 +92,24 @@ export default function ProductDetail() {
         <Link className="back-link" to="/">Quay lại</Link>
         <section className="detail-grid">
           <div className="gallery">
-            <img src={product.images[imageIndex]} alt={product.name} />
+            <div
+              className={`magnifier-frame ${magnifier.active ? "active" : ""}`}
+              onMouseMove={moveMagnifier}
+              onMouseEnter={moveMagnifier}
+              onMouseLeave={() => setMagnifier((current) => ({ ...current, active: false }))}
+            >
+              <img src={currentImage} alt={product.name} />
+              <span
+                className="magnifier-lens"
+                style={{
+                  left: `${magnifier.x}%`,
+                  top: `${magnifier.y}%`,
+                  backgroundImage: `url(${currentImage})`,
+                  backgroundPosition: `${magnifier.bgX}px ${magnifier.bgY}px`,
+                  backgroundSize: `${magnifier.bgWidth}px ${magnifier.bgHeight}px`,
+                }}
+              />
+            </div>
             <div className="thumbs">
               {product.images.map((image, index) => (
                 <button key={image} className={index === imageIndex ? "active" : ""} onClick={() => setImageIndex(index)}>
@@ -46,11 +119,21 @@ export default function ProductDetail() {
             </div>
           </div>
           <div className="detail-info">
-            <p className="eyebrow">{product.brand} / {product.category}</p>
+            <p className="eyebrow detail-crumbs">
+              <Link to={`/?brand=${encodeURIComponent(product.brand)}`}>{product.brand}</Link>
+              <span>/</span>
+              <Link to={`/?category=${encodeURIComponent(product.category)}`}>{product.category}</Link>
+            </p>
             <h1>{product.name}</h1>
-            <div className="rating big"><Star size={18} fill="currentColor" /> {product.rating} / {product.sold} đã bán</div>
+            <div className="rating big">
+              <RatingStars rating={product.rating} size={18} />
+              <span>{product.rating} / {product.sold} đã bán</span>
+            </div>
             <p>{product.description}</p>
-            <div className="price-row detail-price"><strong>{money.format(product.price)}</strong>{product.oldPrice > 0 && <del>{money.format(product.oldPrice)}</del>}</div>
+            <div className="price-row detail-price">
+              <strong>{money.format(product.price)}</strong>
+              {product.oldPrice > 0 && <del>{money.format(product.oldPrice)}</del>}
+            </div>
             <div className="stock">Tồn kho: <b>{product.stock}</b></div>
             <div className="qty large">
               <button onClick={() => setQuantity(Math.max(1, quantity - 1))}><Minus size={16} /></button>
@@ -71,8 +154,11 @@ export default function ProductDetail() {
             <h2>Đánh giá khách hàng</h2>
             {product.reviews.map((review) => (
               <article key={`${review.user}-${review.comment}`} className="review">
-                <strong>{review.user}</strong>
-                <span>{review.rating} sao</span>
+                <div className="review-head">
+                  <strong>{review.user}</strong>
+                  <RatingStars rating={review.rating} />
+                  <span>{review.rating} sao</span>
+                </div>
                 <p>{review.comment}</p>
               </article>
             ))}
@@ -80,9 +166,9 @@ export default function ProductDetail() {
           <div className="distribution">
             <h2>Phân phối sao</h2>
             {starBuckets.map((bucket) => (
-              <div className="bar-row" key={bucket.score}>
-                <span>{bucket.score}</span>
-                <div><i style={{ width: `${Math.min(100, bucket.count * 50)}%` }} /></div>
+              <div className="bar-row star-distribution" key={bucket.score}>
+                <span className="star-score"><Star size={15} fill="currentColor" strokeWidth={0} /> {bucket.score}</span>
+                <div><i style={{ width: `${(bucket.count / maxBucket) * 100}%` }} /></div>
                 <b>{bucket.count}</b>
               </div>
             ))}
