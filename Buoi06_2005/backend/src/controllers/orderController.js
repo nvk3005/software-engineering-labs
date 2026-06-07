@@ -4,6 +4,7 @@ import {
   getUserOrder,
   listUserOrders,
 } from "../services/orderService.js";
+import { createOrderReview, getReviewableOrderItems } from "./reviewController.js";
 
 const send = (res, result) => res.status(result.status).json(result.body);
 
@@ -22,3 +23,5 @@ export async function getOrderDetail(req, res) {
 export async function cancelOrder(req, res) {
   send(res, await cancelUserOrder(req.user.id, req.params.orderId, req.body.reason));
 }
+
+export { createOrderReview, getReviewableOrderItems };

@@ -1,4 +1,6 @@
 import { Product } from "../models/index.js";
+import { recordProductView } from "./preferenceService.js";
+import { listProductReviews } from "./reviewService.js";
 
 const HOT_SCORE_WEIGHTS = Object.freeze({
   sold: 0.5,
@@ -111,7 +113,7 @@ export async function listProducts(query) {
   };
 }
 
-export async function getProductDetail(id) {
+export async function getProductDetail(id, userId = "") {
   const product = await Product.findOneAndUpdate(
     { id },
     { $inc: { views: 1 } },
@@ -120,8 +122,18 @@ export async function getProductDetail(id) {
 
   if (!product) return null;
 
-  const relatedProducts = await Product.findRelated(product);
-  const decorated = decorateHotProducts([product, ...relatedProducts]);
+  if (userId) {
+    await recordProductView(userId, id);
+  }
+
+  const reviews = await listProductReviews(product.id, product.reviews, product.createdAt);
+  const productWithReviews = {
+    ...product,
+    reviews,
+  };
+
+  const relatedProducts = await Product.findRelated(productWithReviews);
+  const decorated = decorateHotProducts([productWithReviews, ...relatedProducts]);
   const [selected, ...related] = decorated;
 
   return {
