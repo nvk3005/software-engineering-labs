@@ -17,7 +17,7 @@ const initialFilters = {
   minRating: "",
   sort: "newest",
   isNew: "",
-  isHot: "",
+  isHot: "true",
   isSale: "",
   page: 1,
   limit: 12
@@ -112,7 +112,18 @@ export default function App() {
 
           <div className="sort-strip">
             <span>Sắp xếp theo:</span>
-            <button className={filters.sort === "newest" ? "active" : ""} onClick={() => setFilter("sort", "newest")}>Nổi bật</button>
+            <button
+              className={filters.isHot === "true" ? "active" : ""}
+              onClick={() =>
+                setFilters((current) => ({
+                  ...current,
+                  isHot: current.isHot === "true" ? "" : "true",
+                  page: 1,
+                }))
+              }
+            >
+              Nổi bật
+            </button>
             <i />
             <button className={filters.sort === "sold" ? "active" : ""} onClick={() => setFilter("sort", "sold")}>Bán chạy</button>
             <i />
