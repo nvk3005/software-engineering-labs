@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
-import { clearCart, fetchCart } from "../store/cartSlice";
+import { fetchCart } from "../store/cartSlice";
 import { checkoutOrder } from "../store/ordersSlice";
 
 const money = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
@@ -24,9 +24,19 @@ export default function CheckoutPage() {
     note: "",
   });
 
+  const selectedProductIds = useMemo(
+    () => searchParams.get("selected")?.split(",").map((id) => id.trim()).filter(Boolean) || [],
+    [searchParams],
+  );
+
+  const checkoutItems = useMemo(
+    () => (selectedProductIds.length ? items.filter((item) => selectedProductIds.includes(item.product.id)) : items),
+    [items, selectedProductIds],
+  );
+
   const total = useMemo(
-    () => items.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
-    [items],
+    () => checkoutItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
+    [checkoutItems],
   );
 
   useEffect(() => {
@@ -39,6 +49,11 @@ export default function CheckoutPage() {
     event.preventDefault();
     setUiNotice("");
 
+    if (!checkoutItems.length) {
+      setUiNotice("Vui lòng quay lại giỏ hàng và chọn ít nhất một sản phẩm để thanh toán.");
+      return;
+    }
+
     if (paymentMethod === "MOMO") {
       setUiNotice("MoMo đã có giao diện chọn thanh toán. Phần tạo giao dịch sẽ được tích hợp sau, nên hiện tại bạn có thể đổi sang COD để đặt đơn.");
       return;
@@ -47,12 +62,13 @@ export default function CheckoutPage() {
     const result = await dispatch(
       checkoutOrder({
         paymentMethod: "COD",
+        selectedProductIds,
         shippingInfo: form,
       }),
     );
 
     if (checkoutOrder.fulfilled.match(result)) {
-      dispatch(clearCart());
+      dispatch(fetchCart());
       navigate(`/orders/${result.payload.id}`);
     }
   };
@@ -100,9 +116,12 @@ export default function CheckoutPage() {
               </button>
             </div>
 
+            {selectedProductIds.length > 0 && (
+              <p className="notice success">Bạn đang thanh toán {checkoutItems.length} sản phẩm đã chọn từ giỏ hàng.</p>
+            )}
             {uiNotice && <p className="notice">{uiNotice}</p>}
             {error && <p className="notice error">{error}</p>}
-            <button className="primary full" disabled={!items.length || checkoutStatus === "loading"}>
+            <button className="primary full" disabled={!checkoutItems.length || checkoutStatus === "loading"}>
               <PackageCheck size={18} />
               {checkoutStatus === "loading" ? "Đang đặt hàng..." : paymentMethod === "MOMO" ? "Tiếp tục với MoMo" : "Xác nhận đặt hàng"}
             </button>
@@ -110,8 +129,8 @@ export default function CheckoutPage() {
 
           <section className="order-summary checkout-summary-card">
             <h2>Giỏ hàng</h2>
-            {items.length === 0 && <p className="muted">Giỏ hàng đang trống.</p>}
-            {items.map((item) => (
+            {!checkoutItems.length && <p className="muted">Chưa có sản phẩm nào được chọn để thanh toán.</p>}
+            {checkoutItems.map((item) => (
               <Link className="summary-item linked-order-item" to={`/products/${item.product.id}`} key={item.product.id}>
                 <img src={item.product.images[0]} alt={item.product.name} />
                 <div>

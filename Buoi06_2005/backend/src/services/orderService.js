@@ -25,6 +25,10 @@ function normalizeShippingInfo(payload = {}, user = {}) {
   };
 }
 
+function normalizeSelectedProductIds(rawIds = []) {
+  return [...new Set((rawIds || []).map((id) => String(id || "").trim()).filter(Boolean))];
+}
+
 function serializeOrder(order) {
   const data = order.toObject ? order.toObject() : order;
   return {
@@ -110,7 +114,19 @@ export async function checkoutOrder(user, payload = {}) {
     return { status: 400, body: { message: "Giỏ hàng đang trống" } };
   }
 
-  const { items, error } = await validateCartItems(cartItems);
+  const selectedProductIds = normalizeSelectedProductIds(payload.selectedProductIds);
+  const effectiveCartItems = selectedProductIds.length
+    ? cartItems.filter((item) => selectedProductIds.includes(item.product.id))
+    : cartItems;
+
+  if (!effectiveCartItems.length) {
+    return {
+      status: 400,
+      body: { message: "Vui lòng chọn ít nhất một sản phẩm để thanh toán" },
+    };
+  }
+
+  const { items, error } = await validateCartItems(effectiveCartItems);
   if (error) return error;
 
   const orderItems = items.map(({ product, quantity, subtotal }) => ({
@@ -142,7 +158,12 @@ export async function checkoutOrder(user, payload = {}) {
       ),
     ),
   );
-  await Cart.clearByUserId(user.id);
+
+  if (selectedProductIds.length) {
+    await Cart.clearSelectedItems(user.id, selectedProductIds);
+  } else {
+    await Cart.clearByUserId(user.id);
+  }
 
   return { status: 201, body: { order: serializeOrder(order) } };
 }

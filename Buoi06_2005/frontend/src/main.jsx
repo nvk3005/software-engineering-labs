@@ -72,14 +72,14 @@ function AppRoutes() {
       <CartToast />
       <Routes>
         <Route path="/auth" element={<AuthPage />} />
-        <Route path="/" element={<Protected><App /></Protected>} />
+        <Route path="/" element={<App />} />
         <Route path="/profile" element={<Protected><ProfilePage /></Protected>} />
         <Route path="/cart" element={<Protected><CartPage /></Protected>} />
         <Route path="/checkout" element={<Protected><CheckoutPage /></Protected>} />
         <Route path="/favorites" element={<Protected><FavoritesPage /></Protected>} />
         <Route path="/orders" element={<Protected><OrdersPage /></Protected>} />
         <Route path="/orders/:orderId" element={<Protected><OrderDetailPage /></Protected>} />
-        <Route path="/products/:id" element={<Protected><ProductDetail /></Protected>} />
+        <Route path="/products/:id" element={<ProductDetail />} />
       </Routes>
     </AppErrorBoundary>
   );

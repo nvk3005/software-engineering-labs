@@ -1,6 +1,5 @@
-import {
+﻿import {
   getProductDetail,
-  getSimilarProducts,
   getTopProducts,
   listProducts,
 } from "../services/productService.js";
@@ -15,14 +14,6 @@ export async function getProductById(req, res) {
     return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
   }
   return res.json(detail);
-}
-
-export async function getSimilarProductList(req, res) {
-  const similar = await getSimilarProducts(req.params.id, req.query);
-  if (!similar) {
-    return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
-  }
-  return res.json(similar);
 }
 
 export async function getTopProductList(req, res) {

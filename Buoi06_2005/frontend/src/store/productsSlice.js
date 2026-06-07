@@ -17,6 +17,7 @@ const productsSlice = createSlice({
     items: [],
     selected: null,
     related: [],
+    recentlyViewed: [],
     facets: { categories: [], brands: [] },
     meta: { total: 0, page: 1, pages: 1 },
     status: "idle"
@@ -36,6 +37,7 @@ const productsSlice = createSlice({
       .addCase(fetchProductDetail.fulfilled, (state, action) => {
         state.selected = action.payload.product;
         state.related = action.payload.related;
+        state.recentlyViewed = action.payload.recentlyViewed || [];
       });
   }
 });

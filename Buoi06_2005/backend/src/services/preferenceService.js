@@ -1,4 +1,4 @@
-import { Favorite, Product, ProductView } from "../models/index.js";
+﻿import { Favorite, Product, ProductView } from "../models/index.js";
 
 function makeId(prefix) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -134,4 +134,3 @@ export async function getUserViewedProducts(userId, options = {}) {
   const items = await listUserViewedProducts(userId, options);
   return { status: 200, body: { items } };
 }
-

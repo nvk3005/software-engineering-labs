@@ -1,4 +1,4 @@
-import { Heart, ShoppingBag } from "lucide-react";
+﻿import { Heart, ShoppingBag } from "lucide-react";
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -68,4 +68,3 @@ export default function FavoritesPage() {
     </>
   );
 }
-

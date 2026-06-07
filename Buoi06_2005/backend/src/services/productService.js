@@ -1,5 +1,5 @@
-import { Product } from "../models/index.js";
-import { recordProductView } from "./preferenceService.js";
+import { Order, ORDER_STATUS, Review, Product } from "../models/index.js";
+import { listUserViewedProducts, recordProductView } from "./preferenceService.js";
 import { listProductReviews } from "./reviewService.js";
 
 const HOT_SCORE_WEIGHTS = Object.freeze({
@@ -53,6 +53,29 @@ function sortProducts(items, sort) {
 function paginateProducts(items, pageNumber, pageSize) {
   const startIndex = (pageNumber - 1) * pageSize;
   return items.slice(startIndex, startIndex + pageSize);
+}
+
+async function buildProductEngagementStats(productId, legacyReviews = []) {
+  const [buyers, modernCommenters, modernReviewsCount] = await Promise.all([
+    Order.distinct("userId", {
+      status: ORDER_STATUS.DELIVERED,
+      "items.productId": productId,
+    }),
+    Review.distinct("userId", { productId }),
+    Review.countDocuments({ productId }),
+  ]);
+
+  const legacyCommenters = new Set(
+    (legacyReviews || [])
+      .map((item) => String(item?.user || "").trim())
+      .filter(Boolean),
+  );
+
+  return {
+    buyersCount: buyers.length,
+    commentersCount: modernCommenters.length + legacyCommenters.size,
+    reviewsCount: Number(modernReviewsCount || 0) + (legacyReviews || []).length,
+  };
 }
 
 export async function listProducts(query) {
@@ -127,18 +150,24 @@ export async function getProductDetail(id, userId = "") {
   }
 
   const reviews = await listProductReviews(product.id, product.reviews, product.createdAt);
+  const stats = await buildProductEngagementStats(product.id, product.reviews || []);
   const productWithReviews = {
     ...product,
+    ...stats,
     reviews,
   };
 
   const relatedProducts = await Product.findRelated(productWithReviews);
   const decorated = decorateHotProducts([productWithReviews, ...relatedProducts]);
   const [selected, ...related] = decorated;
+  const recentlyViewed = userId
+    ? await listUserViewedProducts(userId, { limit: 8, excludeProductId: product.id })
+    : [];
 
   return {
     product: selected,
     related,
+    recentlyViewed,
   };
 }
 

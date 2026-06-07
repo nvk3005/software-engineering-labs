@@ -86,4 +86,21 @@ cartSchema.statics.clearByUserId = async function clearByUserId(userId) {
   return [];
 };
 
+cartSchema.statics.clearSelectedItems = async function clearSelectedItems(
+  userId,
+  productIds = [],
+) {
+  const normalizedIds = [...new Set((productIds || []).map((id) => String(id).trim()).filter(Boolean))];
+  if (!normalizedIds.length) {
+    return this.findByUserId(userId);
+  }
+
+  const cart = await this.findOne({ userId });
+  if (!cart) return [];
+
+  cart.items = cart.items.filter((item) => !normalizedIds.includes(item.product.id));
+  await cart.save();
+  return cart.items;
+};
+
 export const Cart = mongoose.model("Cart", cartSchema);
