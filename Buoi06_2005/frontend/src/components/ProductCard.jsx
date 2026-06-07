@@ -1,10 +1,12 @@
+import { Heart, ShoppingBag, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import { ShoppingBag, Star } from "lucide-react";
 
 const money = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
 
-export default function ProductCard({ product, onAdd }) {
-  const salePercent = product.oldPrice ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : 0;
+export default function ProductCard({ product, onAdd, isFavorite = false, onToggleFavorite }) {
+  const salePercent = product.oldPrice
+    ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)
+    : 0;
 
   return (
     <article className="product-card">
@@ -16,6 +18,16 @@ export default function ProductCard({ product, onAdd }) {
           {product.isSale && <span>-{salePercent}%</span>}
         </div>
       </Link>
+      {onToggleFavorite && (
+        <button
+          type="button"
+          className={`favorite-chip ${isFavorite ? "active" : ""}`}
+          onClick={() => onToggleFavorite(product.id)}
+          aria-label={isFavorite ? "Bỏ khỏi yêu thích" : "Thêm vào yêu thích"}
+        >
+          <Heart size={18} fill={isFavorite ? "currentColor" : "none"} />
+        </button>
+      )}
       <div className="product-body">
         <p className="eyebrow">{product.brand} / {product.category}</p>
         <Link to={`/products/${product.id}`} className="product-title">{product.name}</Link>

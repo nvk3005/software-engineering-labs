@@ -7,6 +7,7 @@ import App from "./pages/App";
 import AuthPage from "./pages/AuthPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import FavoritesPage from "./pages/FavoritesPage";
 import OrderDetailPage from "./pages/OrderDetailPage";
 import OrdersPage from "./pages/OrdersPage";
 import ProductDetail from "./pages/ProductDetail";
@@ -75,6 +76,7 @@ function AppRoutes() {
         <Route path="/profile" element={<Protected><ProfilePage /></Protected>} />
         <Route path="/cart" element={<Protected><CartPage /></Protected>} />
         <Route path="/checkout" element={<Protected><CheckoutPage /></Protected>} />
+        <Route path="/favorites" element={<Protected><FavoritesPage /></Protected>} />
         <Route path="/orders" element={<Protected><OrdersPage /></Protected>} />
         <Route path="/orders/:orderId" element={<Protected><OrderDetailPage /></Protected>} />
         <Route path="/products/:id" element={<Protected><ProductDetail /></Protected>} />

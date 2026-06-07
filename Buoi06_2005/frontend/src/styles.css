@@ -759,6 +759,7 @@ select:focus {
   gap: 20px;
 }
 .product-card {
+  position: relative;
   overflow: hidden;
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
@@ -768,6 +769,64 @@ select:focus {
 }
 .image-link {
   background: #f5f5f7;
+}
+.favorite-chip {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.92);
+  color: #6e6e73;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+.favorite-chip.active {
+  color: #d7265b;
+  border-color: rgba(215, 38, 91, 0.2);
+}
+.favorites-shell {
+  display: grid;
+  gap: 24px;
+}
+.favorites-hero,
+.empty-favorites {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.84);
+  padding: 28px;
+}
+.favorites-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.favorites-hero span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #6e6e73;
+}
+.empty-favorites {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+}
+.empty-favorites > div {
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: rgba(0, 113, 227, 0.08);
+  color: #0066cc;
 }
 .badges span,
 .specs span {

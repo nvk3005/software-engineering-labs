@@ -1,15 +1,17 @@
-import { ClipboardList, LogOut, Search, ShoppingBag, UserRound, Watch, X } from "lucide-react";
-import { useState } from "react";
+import { ClipboardList, Heart, LogOut, Search, ShoppingBag, UserRound, Watch, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../store/authSlice";
 import { clearCart } from "../store/cartSlice";
+import { fetchFavorites } from "../store/engagementSlice";
 
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const user = useSelector((state) => state.auth.user);
+  const favoriteCount = useSelector((state) => state.engagement.favoriteIds.length);
   const count = useSelector((state) => state.cart.items.reduce((sum, item) => sum + item.quantity, 0));
   const [showSearch, setShowSearch] = useState(false);
   const [query, setQuery] = useState("");
@@ -17,7 +19,14 @@ export default function Header() {
   const isHome = location.pathname === "/";
   const isOrders = location.pathname.startsWith("/orders");
   const isProfile = location.pathname === "/profile";
+  const isFavorites = location.pathname === "/favorites";
   const isCart = location.pathname === "/cart" || location.pathname === "/checkout";
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchFavorites());
+    }
+  }, [dispatch, user]);
 
   const signOut = () => {
     dispatch(logout());
@@ -51,6 +60,10 @@ export default function Header() {
       <Link className={`member ${isProfile ? "active" : ""}`} to="/profile" title="Hồ sơ thành viên">
         <UserRound size={18} />
         <span>{user?.name || "Member"}</span>
+      </Link>
+      <Link className={`cart-pill ${isFavorites ? "active" : ""}`} to="/favorites" title="Sản phẩm yêu thích">
+        <Heart size={18} />
+        <span>{favoriteCount}</span>
       </Link>
       <Link className={`cart-pill ${isOrders ? "active" : ""}`} to="/orders" title="Lịch sử đơn hàng">
         <ClipboardList size={18} />
