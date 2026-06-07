@@ -1,5 +1,58 @@
 import { Product } from "../models/index.js";
 
+const HOT_SCORE_WEIGHTS = Object.freeze({
+  sold: 0.5,
+  views: 0.3,
+  rating: 0.2,
+});
+const HOT_RATIO = 0.35;
+
+function computeHotScore(product) {
+  return Number(
+    (
+      (Number(product.sold) || 0) * HOT_SCORE_WEIGHTS.sold +
+      (Number(product.views) || 0) * HOT_SCORE_WEIGHTS.views +
+      (Number(product.rating) || 0) * HOT_SCORE_WEIGHTS.rating
+    ).toFixed(2)
+  );
+}
+
+function decorateHotProducts(items) {
+  if (!items.length) return [];
+
+  const enriched = items.map((item) => ({
+    ...item,
+    hotScore: computeHotScore(item),
+  }));
+
+  const ranked = [...enriched].sort((left, right) => right.hotScore - left.hotScore);
+  const hotCount = Math.max(1, Math.ceil(ranked.length * HOT_RATIO));
+  const threshold = ranked[hotCount - 1]?.hotScore ?? Infinity;
+
+  return enriched.map((item) => ({
+    ...item,
+    isHot: item.hotScore > 0 && item.hotScore >= threshold,
+  }));
+}
+
+function sortProducts(items, sort) {
+  const sorters = {
+    price_asc: (left, right) => left.price - right.price,
+    price_desc: (left, right) => right.price - left.price,
+    rating: (left, right) => right.rating - left.rating,
+    sold: (left, right) => right.sold - left.sold,
+    newest: (left, right) => new Date(right.createdAt) - new Date(left.createdAt),
+  };
+
+  const sorter = sorters[sort] || sorters.newest;
+  return [...items].sort(sorter);
+}
+
+function paginateProducts(items, pageNumber, pageSize) {
+  const startIndex = (pageNumber - 1) * pageSize;
+  return items.slice(startIndex, startIndex + pageSize);
+}
+
 export async function listProducts(query) {
   const {
     search = "",
@@ -29,30 +82,22 @@ export async function listProducts(query) {
   if (maxPrice) filter.price.$lte = Number(maxPrice);
   if (minRating) filter.rating = { $gte: Number(minRating) };
   if (isNew === "true") filter.isNew = true;
-  if (isHot === "true") filter.isHot = true;
   if (isSale === "true") filter.isSale = true;
 
-  const sortMap = {
-    price_asc: { price: 1 },
-    price_desc: { price: -1 },
-    rating: { rating: -1 },
-    sold: { sold: -1 },
-    newest: { createdAt: -1 },
-  };
-
-  const [items, total, categories, brands] = await Promise.all([
-    Product.find(filter)
-      .sort(sortMap[sort] || sortMap.newest)
-      .skip((pageNumber - 1) * pageSize)
-      .limit(pageSize)
-      .lean(),
-    Product.countDocuments(filter),
+  const [matchedProducts, categories, brands] = await Promise.all([
+    Product.find(filter).lean(),
     Product.distinct("category"),
     Product.distinct("brand"),
   ]);
 
+  const hotDecorated = decorateHotProducts(matchedProducts);
+  const filteredItems = isHot === "true" ? hotDecorated.filter((item) => item.isHot) : hotDecorated;
+  const sortedItems = sortProducts(filteredItems, sort);
+  const pagedItems = paginateProducts(sortedItems, pageNumber, pageSize);
+  const total = filteredItems.length;
+
   return {
-    items,
+    items: pagedItems,
     meta: {
       total,
       page: pageNumber,
@@ -75,9 +120,13 @@ export async function getProductDetail(id) {
 
   if (!product) return null;
 
+  const relatedProducts = await Product.findRelated(product);
+  const decorated = decorateHotProducts([product, ...relatedProducts]);
+  const [selected, ...related] = decorated;
+
   return {
-    product,
-    related: await Product.findRelated(product),
+    product: selected,
+    related,
   };
 }
 
@@ -90,16 +139,24 @@ export async function getTopProducts(query) {
 
   const pageNumber = Math.max(Number(page), 1);
   const pageSize = Math.max(Number(limit), 1);
-  const sortField = type == "views" ? "views" : "sold";
+  const allProducts = await Product.find({}).lean();
+  const decorated = decorateHotProducts(allProducts);
 
-  const [items, total] = await Promise.all([
-    Product.find({})
-      .sort({ [sortField]: -1 })
-      .skip((pageNumber - 1) * pageSize)
-      .limit(pageSize)
-      .lean(),
-    Product.countDocuments(),
-  ]);
+  let sortedItems;
+  let sortField;
+  if (type === "views") {
+    sortField = "views";
+    sortedItems = [...decorated].sort((left, right) => right.views - left.views);
+  } else if (type === "hot") {
+    sortField = "hotScore";
+    sortedItems = [...decorated].sort((left, right) => right.hotScore - left.hotScore);
+  } else {
+    sortField = "sold";
+    sortedItems = [...decorated].sort((left, right) => right.sold - left.sold);
+  }
+
+  const total = sortedItems.length;
+  const items = paginateProducts(sortedItems, pageNumber, pageSize);
 
   return {
     items,
